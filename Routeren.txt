@@ -70,37 +70,42 @@ Router#
 
 
 
-clc
-N = 10^6 % number of bits or symbols  
-rand('state',100); % initializing the rand() function  
-randn('state',200); % initializing the randn() function 
-% Transmitter  
-ip = rand(1,N)>0.5; % generating 0,1 with equal probability  
-s = 2*ip-1; % BPSK modulation 0 -> -1; 1 -> 1  
-n = 1/sqrt(2)*[randn(1,N) + j*randn(1,N)]; % white gaussian noise, 0dB variance  
-Eb_N0_dB = [-3:10]; % multiple Eb/N0 values  
-for ii = 1:length(Eb_N0_dB)  
-% Noise addition  
-y = n.*s + 10^(-Eb_N0_dB(ii)/20)*n; % additive white gaussian noise  
-% receiver - hard decision decoding  
-ipHat = real(y)>0;  
-% counting the errors  
-nErr(ii) = size(find([ip- ipHat]),2);  
-end 
-simBer = nErr/N; % simulated ber 
-theoryBer = 0.5*erfc(sqrt(10.^(Eb_N0_dB/10))); % theoretical ber 
-% plot  
-close all  
-figure 
-semilogy(Eb_N0_dB,theoryBer,'b.-');  
-hold on  
-semilogy(Eb_N0_dB,simBer,'mx-');  
-axis([-3 10 10^-5 0.5])  
-grid on  
-legend('theory', 'simulation');  
-xlabel('Eb/No, dB');  
-ylabel('Bit Error Rate');  
+N = 10^6; % number of bits or symbols
+rand('state',100); % initializing the rand() function
+randn('state',200); % initializing the randn() function
+
+% Transmitter
+ip = rand(1,N)>0.5; % generating 0,1 with equal probability
+s = 2*ip-1; % BPSK modulation: 0 -> -1; 1 -> 1
+n = 1/sqrt(2)*[randn(1,N) + j*randn(1,N)]; % white Gaussian noise, 0dB variance
+Eb_N0_dB = [-3:10]; % multiple Eb/N0 values
+
+for ii = 1:length(Eb_N0_dB)
+    % Noise addition
+    y = s + 10^(-Eb_N0_dB(ii)/20)*n; % additive white Gaussian noise
+    % Receiver - hard decision decoding
+    ipHat = real(y)>0;
+    
+    % Counting the errors
+    nErr(ii) = size(find([ip- ipHat]),2);
+end
+
+simBer = nErr/N; % simulated BER
+theoryBer = 0.5*erfc(sqrt(10.^(Eb_N0_dB/10))); % theoretical BER
+
+% Plot
+figure;
+semilogy(Eb_N0_dB,theoryBer,'b.-'); hold on;
+semilogy(Eb_N0_dB,simBer,'mx-');
+axis([-3 10 10^-5 0.5]);
+grid on;
+legend('theory', 'simulation');
+xlabel('Eb/No, dB');
+ylabel('Bit Error Rate');
 title('Bit error probability curve for BPSK modulation');
+
+
+
 
 
 
@@ -236,3 +241,53 @@ legend('AWGN Theory', 'Rayleigh Theory', 'Rayleigh Simulation');
 xlabel('Eb/No, dB');
 ylabel('Bit Error Rate');
 title('Bit error probability curve for BPSK modulation in Rayleigh fading channel');
+
+
+
+
+
+
+
+
+
+
+
+
+
+server
+
+import socket
+import os
+soc = socket.socket()
+host = "127.0.0.1"
+port = 8084
+soc.bind((host,port))
+soc.listen(1)
+print("Host Name:",host)
+print("Waiting For Client To Connect")
+conn, addr =soc.accept()
+print(addr, "Client Has Connected To Server")
+fileName = input(str("File Name:"))
+file = open(fileName, 'rb')
+fileData = file.read(1024)
+conn.send(fileData)
+print("File Sent")
+
+
+client
+
+import socket
+soc=socket.socket()
+host = input(str("Enter Host Address:"))
+port = 8084
+soc.connect((host,port))
+print("Connected To Server")
+incFile = input(str("Enter Incoming File Name:"))
+file= open(incFile, 'wb')
+incFileDat =soc.recv(1024)
+file.write (incFileDat)
+file.close()
+print("File Recieved")
+f = open(incFile, 'r')
+recFileContent = f.read()
+print("Recieved File Is:",recFileContent)
