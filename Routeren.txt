@@ -1,0 +1,238 @@
+Router>en
+Router#int f0/0
+^
+% Invalid input detected at '^' marker.
+Router#config t
+Enter configuration commands, one per line. End with CNTL/Z.
+Router(config)#int f0/0
+Router(config-if)#ip addr 192.168.10.1 255.255.255.0
+Router(config-if)#int f0/1
+Router(config-if)#ip addr 192.168.20.1
+% Incomplete command.
+Router(config-if)#ip addr 192.168.20.1 255.255.255.0
+Router(config-if)#int f90/0
+^
+% Invalid input detected at '^' marker.
+Router(config-if)#int f0/0
+Router(config-if)#ip dhcp pool lab1
+Router(dhcp-config)#network 192.168.10.1
+% Incomplete command.
+Router(dhcp-config)#network 192.168.10.1 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#exit
+Router(config)#int f0/1
+Router(config-if)#ip dhcp pool lab2
+Router(dhcp-config)#network 192.168.20.1 255.255.255.0
+Router(dhcp-config)#deafult-router 192.168.1.1
+^
+% Invalid input detected at '^' marker.
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#dns-server 10.10.10.10
+Router(dhcp-config)#exit
+Router(config)#int f0/0
+Router(config-if)#no shutdown
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+Router(config-if)#int f0/1
+Router(config-if)#no shutdown
+
+Router(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+Router(config-if)#exit
+Router(config)#exit
+Router#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Router#sh run| sec dhcp
+^
+% Invalid input detected at '^' marker.
+Router#sh run | sec dhcp
+ip dhcp pool lab1
+network 192.168.10.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 8.8.8.8
+ip dhcp pool lab2
+network 192.168.20.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 10.10.10.10
+Router#
+Router#
+
+
+
+
+
+clc
+N = 10^6 % number of bits or symbols  
+rand('state',100); % initializing the rand() function  
+randn('state',200); % initializing the randn() function 
+% Transmitter  
+ip = rand(1,N)>0.5; % generating 0,1 with equal probability  
+s = 2*ip-1; % BPSK modulation 0 -> -1; 1 -> 1  
+n = 1/sqrt(2)*[randn(1,N) + j*randn(1,N)]; % white gaussian noise, 0dB variance  
+Eb_N0_dB = [-3:10]; % multiple Eb/N0 values  
+for ii = 1:length(Eb_N0_dB)  
+% Noise addition  
+y = n.*s + 10^(-Eb_N0_dB(ii)/20)*n; % additive white gaussian noise  
+% receiver - hard decision decoding  
+ipHat = real(y)>0;  
+% counting the errors  
+nErr(ii) = size(find([ip- ipHat]),2);  
+end 
+simBer = nErr/N; % simulated ber 
+theoryBer = 0.5*erfc(sqrt(10.^(Eb_N0_dB/10))); % theoretical ber 
+% plot  
+close all  
+figure 
+semilogy(Eb_N0_dB,theoryBer,'b.-');  
+hold on  
+semilogy(Eb_N0_dB,simBer,'mx-');  
+axis([-3 10 10^-5 0.5])  
+grid on  
+legend('theory', 'simulation');  
+xlabel('Eb/No, dB');  
+ylabel('Bit Error Rate');  
+title('Bit error probability curve for BPSK modulation');
+
+
+
+clc;
+
+% Define the order of the Walsh code
+order = 8;
+
+% Generate the Hadamard matrix of the specified order
+H = hadamard(order);
+
+% Select the rows of the Hadamard matrix as Walsh codes for each station
+c1 = H(1,:);
+c2 = H(2,:);
+c3 = H(3,:);
+c4 = H(4,:);
+% Display the Walsh codes
+disp('Walsh codes for each station:');
+disp(['Station 1: ', num2str(c1)]);
+disp(['Station 2: ', num2str(c2)]);
+disp(['Station 3: ', num2str(c3)]);
+disp(['Station 4: ', num2str(c4)]);
+
+    fprintf('Enter the data bits:\n');
+    d1 = input('Enter D1: ');
+    d2 = input('Enter D2: ');
+    d3 = input('Enter D3: ');
+    d4 = input('Enter D4: ');
+
+    % Multiply each station's data bits with its respective code
+    r1 = c1 * d1;
+    r2 = c2 * d2;
+    r3 = c3 * d3;
+    r4 = c4 * d4;
+    
+    resultant_channel = r1 + r2 + r3 + r4 ;
+while true
+    Channel = input('Enter the station no: ');
+
+    if Channel == 0
+        break; 
+    end
+
+    switch Channel
+        case 1
+            rc = c1;
+        case 2
+            rc = c2;
+        case 3
+            rc = c3;
+        case 4
+            rc = c4;
+        otherwise
+            error('Invalid station selected.');
+    end
+
+    inner_product = resultant_channel .* rc;
+
+    data = sum(inner_product) / length(inner_product);
+
+    fprintf('Data bit that was sent: %f\n', data);
+end
+
+
+
+
+clc
+N = 10^6; % number of bits or symbols
+rand(100); % initializing the random number generator
+randn('state',200); % initializing the randn() function
+
+% Transmitter
+ip = rand(1,N)>0.5; % generating 0,1 with equal probability
+s = 2*ip-1; % BPSK modulation 0 -> -1; 1 -> 1
+
+% AWGN Channel
+n_AWGN = 1/sqrt(2)*[randn(1,N) + 1i*randn(1,N)]; % white Gaussian noise, 0dB variance
+
+Eb_N0_dB = (-3:60); % multiple Eb/N0 values
+
+% AWGN Simulation
+nErr_AWGN = zeros(size(Eb_N0_dB));
+for ii = 1:length(Eb_N0_dB)
+    % Noise addition
+    y_AWGN = s + 10^(-Eb_N0_dB(ii)/20)*n_AWGN; % additive white Gaussian noise
+    % Receiver - hard decision decoding
+    ipHat_AWGN = real(y_AWGN)>0;
+    % Counting the errors
+    nErr_AWGN(ii) = sum(ip ~= ipHat_AWGN);
+end
+simBer_AWGN = nErr_AWGN/N; % simulated BER
+theoryBer_AWGN = 0.5*erfc(sqrt(10.^(Eb_N0_dB/10))); % theoretical BER for AWGN
+
+% Plot AWGN
+figure
+semilogy(Eb_N0_dB, theoryBer_AWGN,'b.-');
+hold on
+semilogy(Eb_N0_dB, simBer_AWGN,'mx-');
+axis([-3 10 1e-5 0.5])
+grid on
+legend('AWGN Theory', 'AWGN Simulation');
+xlabel('Eb/No, dB');
+ylabel('Bit Error Rate');
+title('Bit error probability curve for BPSK modulation in AWGN channel');
+
+% Rayleigh Channel
+h = 1/sqrt(2)*[randn(1,N) + 1i*randn(1,N)]; % Rayleigh fading channel
+n_AWGN = 1/sqrt(2)*[randn(1,N) + 1i*randn(1,N)]; % white Gaussian noise, 0dB variance
+n_Rayleigh = h.*n_AWGN; % multiply by Rayleigh fading coefficients
+
+% Rayleigh Simulation
+nErr_Rayleigh = zeros(size(Eb_N0_dB));
+for ii = 1:length(Eb_N0_dB)
+    % Noise addition
+    y_Rayleigh = s + 10^(-Eb_N0_dB(ii)/20)*n_Rayleigh; % additive noise in Rayleigh channel
+    % Receiver - hard decision decoding
+    ipHat_Rayleigh = real(y_Rayleigh)>0;
+    % Counting the errors
+    nErr_Rayleigh(ii) = sum(ip ~= ipHat_Rayleigh);
+end
+simBer_Rayleigh = nErr_Rayleigh/N; % simulated BER
+theoryBer_Rayleigh = 0.5*(1-sqrt(10.^(Eb_N0_dB/10)./(1+10.^(Eb_N0_dB/10)))); % theoretical BER for Rayleigh
+
+% Plot Rayleigh
+figure
+semilogy(Eb_N0_dB, theoryBer_AWGN,'b.-');
+hold on
+semilogy(Eb_N0_dB, theoryBer_Rayleigh,'g--');
+semilogy(Eb_N0_dB, simBer_Rayleigh,'r.-','MarkerSize',4); % Reduce marker size
+axis([-3 10 1e-5 0.5])
+grid on
+legend('AWGN Theory', 'Rayleigh Theory', 'Rayleigh Simulation');
+xlabel('Eb/No, dB');
+ylabel('Bit Error Rate');
+title('Bit error probability curve for BPSK modulation in Rayleigh fading channel');
