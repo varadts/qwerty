@@ -1,4 +1,148 @@
+An operator has channels from 900 MHz, 1800 MHz and 1900 MHz mobile 
+spectrum. Total subscribers in zone 1= 10000, zone 2= 15000 and zone 3=
+5000.
+Prepare a frequency reuse strategy for all zones with respect to spectrum 
+efficiency utilization, co-channel interference and optimum revenue
+generation.
+Consideration: Assume suitable data, system should dynamically allocate 
+channels and ensure that there are minimal call drops.
+Zone 1= Total area of 25 km
+radius Zone 2= Total area of 30
+km radius Zone 3= Total area of
+15 km radius Use GSM Standards 
+(2G to 3G)
+Total number of calls for service at a time: 25 (Last two digits of your roll 
+number)
+Solution:
+Assumptions: -
+Generation: 2G
+Frequency band: 900 MHz, 1800 MHz and 1900 MHz 
+Standard: GSM
+Total available bandwidth: Uplink: 890 MHz to 915 MHz (25 MHz)
+Downlink: 935 MHz to 960 MHz (25 MHz) 
+Bandwidth per channel: 200 KHz
+Number of available channels: 124 Full Duplex 
+Radius of hexagonal cell (R): 0.5 km
 
+Area of Zone = 𝜋𝑟2= 𝜋252= 1963.50 sq. km 
+
+Cluster size or Frequency Reuse Ratio (S)= 3
+
+Area of Cluster= S* 3√3*R2 = 1.95 sq. km
+
+2
+
+Number of Clusters: 
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝐶𝑙𝑢𝑠𝑡𝑒𝑟
+
+= 1007
+
+Subscriber Density= 𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑏𝑠𝑐𝑟𝑖𝑏𝑒𝑟𝑠 𝑖𝑛 𝑍𝑜𝑛𝑒 = 5 per sq. km
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+Total Channels per Cluster = 10 full duplex channels operating at 900 MHz
+
+Subscribers which can be served= Total Channels per Cluster * Number of 
+
+Clusters = 10070
+
+ZONE 2:
+
+Area of Zone = 𝜋𝑟2= 𝜋302= 2827.50 sq. km 
+
+Cluster size or Frequency Reuse Ratio (S)= 4
+
+Area of Cluster= S* 3√3*R2 = 2.60 sq. km
+
+2
+
+Number of Clusters: 
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝐶𝑙𝑢𝑠𝑡𝑒𝑟
+
+= 1088
+
+Subscriber Density= 𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑏𝑠𝑐𝑟𝑖𝑏𝑒𝑟𝑠 𝑖𝑛 𝑍𝑜𝑛𝑒 = 5 per sq. km
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+Total Channels per Cluster = 15 full duplex channels operating at 1800 MHz
+
+Subscribers which can b
+
+Cluster size or Frequency Reuse Ratio (S)=2
+
+Area of Cluster= S* 3√3*R2 = 1.30 sq. km
+
+2
+
+Number of Clusters: 
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝐶𝑙𝑢𝑠𝑡𝑒𝑟
+
+= 544
+
+Subscriber Density= 𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑏𝑠𝑐𝑟𝑖𝑏𝑒𝑟𝑠 𝑖𝑛 𝑍𝑜𝑛𝑒 = 7 per sq. km
+
+𝐴𝑟𝑒𝑎 𝑜𝑓 𝑍𝑜𝑛𝑒
+
+Total Channels per Cluster = 10 full duplex channels operating at 1900 MHz
+
+Subscribers which can be served= Total Channels per Cluster * Number of 
+
+Clusters= 5440
+
+Blocking Probability Considerations:
+
+To integrate the concept of blocking probability, we need to consider the 
+
+capacity of the network in terms of the number of subscribers it can handle 
+
+simultaneously without exceeding a certain blocking probability threshold.
+
+Let's calculate the blocking probability for each zone based on the provided
+
+data and then adjust the channel allocation strategy accordingly to minimize 
+
+call drops.
+
+We'll use the Erlang B formula to calculate the blocking probability:
+
+𝐴
+
+𝑁
+
+𝑃𝑏 = 𝑁!
+
+∑𝑁−1 𝐴𝑥
+
++
+
+𝐴𝑁
+
+Where:
+
+Pb is the blocking
+
+probability.
+
+𝑥=0 𝑥! 𝑁!
+
+Ais the traffic intensity (the average number of simultaneous
+
+calls). N is the number of available channels.
+
+Given that the total number of calls for service at a time is 25, let's calculate
+
+the traffic intensity for each zone a
 
 importnumpy as np 
 c1=[1,1,1,1] 
